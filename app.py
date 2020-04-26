@@ -43,7 +43,7 @@ def get_recommendations(title, cosine_sim):
 
 @app.route('/recommend/',methods=['GET'])
 
-def recommend():
+def recommend(x,y):
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
     return result.to_json()
