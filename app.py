@@ -41,14 +41,14 @@ def get_recommendations(title, cosine_sim):
     return df2['title'].iloc[movie_indices]
 
 
-@app.route('/recommend/<title>',methods=['GET'])
+@app.route('/recommend/<string:title>',methods=['GET'])
 
-def recommend():
-    title = request.args.get("title", None)
+def recommend(title):
+    #title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
     return result.to_json()
 
-@app.route('/',methods=['GET'])
+@app.route('/')
 
 def default():
     return "<h1>Welcome</h1>"
