@@ -13,7 +13,7 @@ with open('./data/model.pkl','rb') as f:
 
 with open('./data/df2.pkl','rb') as f:
     df2 = pickle.load(f) 
-
+    
 df2 = df2.reset_index()
 #count_matrix = count1.fit_transform(df2['soup'])    
 
