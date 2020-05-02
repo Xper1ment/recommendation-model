@@ -46,19 +46,21 @@ def get_recommendations(title, cosine_sim):
     
     # Return the top 10 most similar movies
     dict1 =  df2['title'].iloc[movie_indices].to_dict()
+    #print(dict1)
     dict2 = df2['homepage'].iloc[movie_indices].to_dict()
     dict3 = mergeDict(dict2,dict1)
     keys_values = dict3.items()
     new_d = {str(key): value for key, value in keys_values}
-    result = json.dumps(new_d) 
-    return result
+    #print(new_d) 
+    return new_d
 
 @app.route('/recommend/',methods=['GET'])
 
 def recommend():
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
-    return result
+    print(type(result))
+    return jsonify(result)
 
 @app.route('/')
 
