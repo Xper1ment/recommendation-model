@@ -59,7 +59,6 @@ def get_recommendations(title, cosine_sim):
 def recommend():
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
-    print(type(result))
     return jsonify(result)
 
 @app.route('/')
