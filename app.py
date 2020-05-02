@@ -1,4 +1,4 @@
-import pickle ,json
+import pickle ,json,math
 from flask import Flask,jsonify,request
 from flask_cors import CORS
 import json
@@ -25,9 +25,10 @@ def mergeDict(dict1, dict2):
     dict3 = {**dict1, **dict2}
     for key, value in dict3.items():
         if key in dict1 and key in dict2:
-            dict3[key] = [value , dict1[key]]   
+            dict3[key] = {'name': value , 'website': dict1[key]}   
     return dict3
-    
+
+
 def get_recommendations(title, cosine_sim):
     # Get the index of the movie that matches the title
     idx = indices[title]
@@ -46,13 +47,15 @@ def get_recommendations(title, cosine_sim):
     
     # Return the top 10 most similar movies
     dict1 =  df2['title'].iloc[movie_indices].to_dict()
-    #print(dict1)
-    dict2 = df2['homepage'].iloc[movie_indices].to_dict()
+    
+    dict2 = df2['homepage'].iloc[movie_indices]
+    dict2 = dict2.fillna('')
+    dict2 = dict2.to_dict()
     dict3 = mergeDict(dict2,dict1)
     keys_values = dict3.items()
-    new_d = {str(key): value for key, value in keys_values}
-    #print(new_d) 
-    return new_d
+    result = {str(key): value for key, value in keys_values}
+    #result = json.dumps(new_d) 
+    return result
 
 @app.route('/recommend/',methods=['GET'])
 
