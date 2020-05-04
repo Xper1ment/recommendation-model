@@ -1,5 +1,6 @@
 import pickle ,json,math
 from flask import Flask,jsonify,request
+from book import recomm_books
 from flask_cors import CORS
 import json
 import pandas as pd
@@ -63,6 +64,14 @@ def recommend():
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
     return jsonify(result)
+
+@app.route('/recommend_books/',methods=['GET'])
+
+def recommend_books():
+    title = request.args.get("title", None)
+    result = recomm_books(title)
+    return jsonify(result)
+
 
 @app.route('/')
 
