@@ -68,11 +68,11 @@ cosine_sim_corpus = linear_kernel(tfidf_matrix_corpus, tfidf_matrix_corpus)
 # Build a 1-dimensional array with book titles
 titles = books['title']
 url = books['image_url']
-indices = pd.Series(books.index, index=books['title'])
+indices1 = pd.Series(books.index, index=books['title'])
 
 # Function that get book recommendations based on the cosine similarity score of books tags
 def recomm_books(title):
-    idx = indices[title]
+    idx = indices1[title]
     sim_scores = list(enumerate(cosine_sim_corpus[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:21]
