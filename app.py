@@ -56,7 +56,7 @@ def get_recommendations(title, cosine_sim):
     #result = json.dumps(new_d) 
     return result
 
-with open('./data/book_model.pkl', 'rb') as f:
+'''with open('./data/book_model.pkl', 'rb') as f:
     tfidf_matrix_corpus = pickle.load(f)
 
 with open('./data/books.pkl','rb') as f:
@@ -83,7 +83,7 @@ def recomm_books(title):
     keys_values = ans.items()
     result = {str(key): value for key, value in keys_values}
     return result
-
+'''
 
 @app.route('/recommend/',methods=['GET'])
 
@@ -92,13 +92,13 @@ def recommend():
     result = get_recommendations(title,cosine_sim2)
     return jsonify(result)
 
-@app.route('/recommend_books/',methods=['GET'])
+'''@app.route('/recommend_books/',methods=['GET'])
 
 def recommend_books():
     title = request.args.get("title", None)
     result = recomm_books(title)
     return jsonify(result)
-
+'''
 
 @app.route('/')
 
