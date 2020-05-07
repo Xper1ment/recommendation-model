@@ -29,67 +29,43 @@ def mergeDict(dict1, dict2):
     return dict3
 
 def get_recommendations(title, cosine_sim):
-    # Get the index of the movie that matches the title
-    idx = indices[title]
+    try:
+        # Get the index of the movie that matches the title
+        idx = indices[title]
 
-    # Get the pairwsie similarity scores of all movies with that movie
-    sim_scores = list(enumerate(cosine_sim[idx]))
+        # Get the pairwsie similarity scores of all movies with that movie
+        sim_scores = list(enumerate(cosine_sim[idx]))
 
-    # Sort the movies based on the similarity scores
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        # Sort the movies based on the similarity scores
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
-    # Get the scores of the 10 most similar movies
-    sim_scores = sim_scores[1:11]
+        # Get the scores of the 10 most similar movies
+        sim_scores = sim_scores[1:11]
 
-    # Get the movie indices
-    movie_indices = [i[0] for i in sim_scores]
-    
-    # Return the top 10 most similar movies
-    dict1 =  df2['title'].iloc[movie_indices].to_dict()
-    
-    dict2 = df2['homepage'].iloc[movie_indices]
-    dict2 = dict2.fillna('')
-    dict2 = dict2.to_dict()
-    dict3 = mergeDict(dict2,dict1)
-    keys_values = dict3.items()
-    result = {str(key): value for key, value in keys_values}
-    #result = json.dumps(new_d) 
-    return result
-
-'''with open('./data/book_model.pkl', 'rb') as f:
-    tfidf_matrix_corpus = pickle.load(f)
-
-with open('./data/books.pkl','rb') as f:
-    books = pickle.load(f)
-
-cosine_sim_corpus = linear_kernel(tfidf_matrix_corpus, tfidf_matrix_corpus)
-
-
-# Build a 1-dimensional array with book titles
-titles = books['title']
-url = books['image_url']
-indices1 = pd.Series(books.index, index=books['title'])
-
-# Function that get book recommendations based on the cosine similarity score of books tags
-def recomm_books(title):
-    idx = indices1[title]
-    sim_scores = list(enumerate(cosine_sim_corpus[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:21]
-    book_indices = [i[0] for i in sim_scores]
-    urls = url.iloc[book_indices].to_dict()
-    name = titles.iloc[book_indices].to_dict()
-    ans = mergeDict(urls,name)
-    keys_values = ans.items()
-    result = {str(key): value for key, value in keys_values}
-    return result
-'''
+        # Get the movie indices
+        movie_indices = [i[0] for i in sim_scores]
+        
+        # Return the top 10 most similar movies
+        dict1 =  df2['title'].iloc[movie_indices].to_dict()
+        
+        dict2 = df2['homepage'].iloc[movie_indices]
+        dict2 = dict2.fillna('')
+        dict2 = dict2.to_dict()
+        dict3 = mergeDict(dict2,dict1)
+        keys_values = dict3.items()
+        result = {str(key): value for key, value in keys_values}
+        #result = json.dumps(new_d) 
+        return result
+    except KeyError:
+        pass
 
 @app.route('/recommend/',methods=['GET'])
 
 def recommend():
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
+    if result is None:
+        return jsonify({"error_code":"404","message":"Resource not found"})
     return jsonify(result)
 
 '''@app.route('/recommend_books/',methods=['GET'])
