@@ -8,6 +8,10 @@ from sklearn.metrics.pairwise import cosine_similarity,linear_kernel
 app = Flask(__name__)
 CORS(app)
 
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=e), 404
+
 with open('./data/model.pkl','rb') as f:
     count_matrix = pickle.load(f)
 
@@ -65,7 +69,7 @@ def recommend():
     title = request.args.get("title", None)
     result = get_recommendations(title,cosine_sim2)
     if result is None:
-        return jsonify({"error_code":"404","message":"Resource not found"})
+        return resource_not_found("Resource not found")
     return jsonify(result)
 
 '''@app.route('/recommend_books/',methods=['GET'])
